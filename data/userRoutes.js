@@ -72,4 +72,23 @@ router.put('/users/:id', async (req, res) => {
     }
 })
 
+// Get posts by user
+router.get('/users/:id/posts', async (req, res) => {
+    try {
+        const user = await userDB.getById(req.params.id)
+        if (user) {
+            const posts = await userDB.getUserPosts(req.params.id)
+            if (user && posts) {
+                res.status(200).json(posts)
+            } else {
+                res.status(404).json({ message: "The user with the specified ID does not exist "})
+            }
+        } else {
+            res.status(400).json({ errorMessage: "Please provide the correct name for user" })   
+        } 
+    } catch(error) {
+        res.status(500).json({ error: "Could not retrieve the users post" })
+    }
+})
+
 module.exports = router
