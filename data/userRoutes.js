@@ -45,10 +45,13 @@ router.post('/users', upperCaseMW, async (req, res) => {
 })
 
 router.delete('/users/:id', async (req, res) => {
+    const { id } = req.params
     try {
-        const user = await userDB.remove(req.params.id)
+        const user = await userDB.getById(id)
         if (user) {
-            res.json(user)
+            await postDB.removeByUser(id)
+            await userDB.remove(id)
+            res.json({ removed: user })
         } else {
             res.status(404).json({ message: "The user with the specified ID does not exist."})
         }
