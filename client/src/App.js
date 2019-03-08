@@ -6,7 +6,8 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
-      users: []
+      users: [],
+      posts: []
     }
   }
 
@@ -21,8 +22,20 @@ class App extends Component {
     })
   }
 
+  getPosts =() => {
+    axios.get('https://lee-tann-node-blog.herokuapp.com/api/posts')
+    .then(res => {
+      console.log(res)
+      this.setState(() => ({ posts: res.data }))
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+
   componentDidMount() {
     this.getUsers()
+    this.getPosts()
   }
 
   render() {
@@ -30,12 +43,14 @@ class App extends Component {
     return (
       <div className="App">
         <p>Lee's Node Blog</p>
-        <p>USERS:</p>
-        {this.state.users.map(user => {
-          return(
-            <p key={user.id}>NAME: {user.name}</p>
-          )
-        })}
+        <div>
+          <p>POSTS:</p>
+          {this.state.posts.map(post => {
+            return(
+              <p key={post.id}>Post: {post.text}</p>
+            )
+          })}
+        </div>
       </div>
     );
   }
