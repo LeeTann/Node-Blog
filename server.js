@@ -15,4 +15,9 @@ server.get('/', (req, res) => {
     res.send('Hello world from express')
 })
 
+// Global middlware
+server.use(function(req, res) {
+    res.status(404).send(`Ain't Nobody got time for dat!!! Please enter the right URL request.`)
+})
+
 module.exports = server
